@@ -1,90 +1,50 @@
 package com.example.pidev.entity;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+
 
 import javax.persistence.*;
-import java.io.Serializable;
-import java.math.BigDecimal;
+import java.util.Set;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
 @Entity
-@Table( name = "users" )
-public class User implements Serializable {
-
-
+public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
-
-    @Column(name = "first_name")
-    private String firstName;
-
-    @Column(name = "last_name")
-    private String lastName;
-
-    @Column(name = "username")
-    private String username;
-
-    @Column(name = "email")
-    private String email;
-
-    @Column(name = "password")
+    private String userName;
+    private String nom;
+    private String prenom;
     private String password;
+    private String email;
+    private String fileName;
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
+    private int phoneNumber;
 
-    @Column(name = "skills_list")
-    private String skillsList;
 
-    @Column(name = "description")
-    private String description;
 
-    @Column(name = "level")
-    private int level;
 
-    @Column(name = "hourly_rate")
-    private BigDecimal hourlyRate;
 
-    @Column(name = "verified")
-    private boolean verified;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "USER_ROLE",
+            joinColumns = { @JoinColumn(name = "USER_ID") },
+            inverseJoinColumns = {
+                    @JoinColumn(name = "ROLE_ID") })
+    private Set<Role> role;
 
-    @Column(name = "identity_card")
-    private String identityCard;
 
-    public void setId(Long id) {
-        this.id = id;
+
+
+    public Gender getGender() {
+        return gender;
     }
 
-    public Long getId() {
-        return id;
+    public void setGender(Gender gender) {
+        this.gender = gender;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public int getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
+    public void setPhoneNumber(int phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public String getEmail() {
@@ -95,6 +55,30 @@ public class User implements Serializable {
         this.email = email;
     }
 
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getNom() {
+        return nom;
+    }
+
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+
+    public String getPrenom() {
+        return prenom;
+    }
+
+    public void setPrenom(String prenom) {
+        this.prenom = prenom;
+    }
+
     public String getPassword() {
         return password;
     }
@@ -103,51 +87,21 @@ public class User implements Serializable {
         this.password = password;
     }
 
-    public String getSkillsList() {
-        return skillsList;
+    public Set<Role> getRole() {
+        return role;
     }
 
-    public void setSkillsList(String skillsList) {
-        this.skillsList = skillsList;
+    public void setRole(Set<Role> role) {
+        this.role = role;
     }
 
-    public String getDescription() {
-        return description;
+    public String getFileName() {
+        return fileName;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 
-    public int getLevel() {
-        return level;
-    }
-
-    public void setLevel(int level) {
-        this.level = level;
-    }
-
-    public BigDecimal getHourlyRate() {
-        return hourlyRate;
-    }
-
-    public void setHourlyRate(BigDecimal hourlyRate) {
-        this.hourlyRate = hourlyRate;
-    }
-
-    public boolean isVerified() {
-        return verified;
-    }
-
-    public void setVerified(boolean verified) {
-        this.verified = verified;
-    }
-
-    public String getIdentityCard() {
-        return identityCard;
-    }
-
-    public void setIdentityCard(String identityCard) {
-        this.identityCard = identityCard;
-    }
 }
+
