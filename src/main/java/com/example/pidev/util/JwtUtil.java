@@ -14,7 +14,7 @@ import java.util.function.Function;
 @Component
 public class JwtUtil {
 
-    private static final String SECRET_KEY = "projet_workwave";
+    private static final String SECRET_KEY = "projet_winder";
     private static final int TOKEN_VALIDITY = 3600 * 5;
     public String getUserNameFromToken(String token){
         return getClaimFromToken(token, Claims::getSubject);

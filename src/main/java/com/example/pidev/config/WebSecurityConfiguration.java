@@ -41,10 +41,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         httpSecurity.cors();
         httpSecurity.csrf().disable()
                 .authorizeRequests().antMatchers("/authenticate","/users","/delete/{userName}","/list","/ImgUsers/{userName}","/pdf","/registerNewUser","/updateUser"
-                        ,"/getUser/{{userName}}","/updateUser/{{userName}}","/holiday","/addHoliday","/updateHoliday","/deleteHoliday/{id}","/holidaybyuser/{username}",
-                        "/refresh","/PartenaireC/retrieve-partenaire/{Partenaire-id}","/PartenaireC/addPartenaire","/PartenaireC/updatePartenaire","/PartenaireC/deletePartenaire/{partenaire-id}" ,
-                        "/OffreC/","/OffreC/retrieve-Offre/{Offre-id}","/OffreC/addOffre","/OffreC/updateOffre","/OffreC/deleteOffre/{Offre-id}",
-                        "/Contrat","/ContratById/{id}","/addContrat","/updateContrat","/deleteContrat/{id}").permitAll()
+                        ,"/getUser/{{userName}}","/updateUser/{{userName}}",
+                        "/refresh").permitAll()
                 .antMatchers(HttpHeaders.ALLOW).permitAll()
                 .anyRequest().authenticated()
                 .and()
