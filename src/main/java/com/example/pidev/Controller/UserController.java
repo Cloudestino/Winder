@@ -6,14 +6,17 @@ import com.example.pidev.Service.UserServiceImpl;
 import com.example.pidev.entity.User;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
+import java.util.Collection;
 import java.util.List;
 
 @RestController
-public class UserController {
+public class UserController implements UserDetails {
 
     @Autowired
     UserServiceImpl userService;
@@ -34,7 +37,7 @@ public class UserController {
     }
 
 
-    @GetMapping("/users") //didn't use it
+    @GetMapping("/users") // afficher tout les utilisateurs
     public List<User> retrieveAllUsers() {
         return userService.retrieveAllUsers();
     }
@@ -55,6 +58,9 @@ public class UserController {
         return userService.registerNewUser(user, file);
     }
 
+
+
+
     @PutMapping("/updateUser/{userName}")
     public User updateUser(@RequestBody User user, @PathVariable("userName") String userName) {
         return userService.updateUser(user, userName);
@@ -66,4 +72,49 @@ public class UserController {
     }
 
 
+
+
+
+
+    @GetMapping(path= "/test" )
+    public String getRequest()
+    {
+        return "welcome";
+    }
+
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
+    }
+
+    @Override
+    public String getPassword() {
+        return null;
+    }
+
+    @Override
+    public String getUsername() {
+        return null;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }

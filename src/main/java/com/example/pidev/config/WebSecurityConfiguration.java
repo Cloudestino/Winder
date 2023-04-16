@@ -10,7 +10,6 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -36,20 +35,23 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
+   //String yahya = "localhost:8089/login/oauth2/code/google";
+
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.cors();
         httpSecurity.csrf().disable()
-                .authorizeRequests().antMatchers("/authenticate","/users","/delete/{userName}","/list","/ImgUsers/{userName}","/pdf","/registerNewUser","/updateUser"
-                        ,"/getUser/{{userName}}","/updateUser/{{userName}}",
-                        "/refresh").permitAll()
+                .authorizeRequests().antMatchers("/authenticate","/users","/delete/{userName}","/list","/ImgUsers/{userName}","/registerNewUser","/updateUser"
+                        ,"/getUser/{{userName}}","/updateUser/{{userName}}","/", "/login**","/login" ,"/error**").permitAll()
                 .antMatchers(HttpHeaders.ALLOW).permitAll()
-                .anyRequest().authenticated()
+                .anyRequest()
+                .authenticated()
                 .and()
+                .oauth2Login();
+              /*  .and()
                 .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 .and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        ;
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)*/
 
         httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
     }

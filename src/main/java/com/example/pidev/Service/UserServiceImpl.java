@@ -93,7 +93,7 @@ public class UserServiceImpl {
 
             // Update the User object and save to the database
             us.setFileName(newFileName);
-            Role role = roleRepository.findById("Etudiant").get();
+            Role role = roleRepository.findById("Admin").get();
             Set<Role> userRoles = new HashSet<>();
             userRoles.add(role);
             us.setRole(userRoles);
