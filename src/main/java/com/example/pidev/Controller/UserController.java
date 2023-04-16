@@ -8,12 +8,14 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class UserController implements UserDetails {
@@ -77,10 +79,21 @@ public class UserController implements UserDetails {
 
 
     @GetMapping(path= "/test" )
-    public String getRequest()
+    public Map<String,Object> currentUser(OAuth2AuthenticationToken oAuth2AuthenticationToken)
     {
-        return "welcome";
+        return oAuth2AuthenticationToken.getPrincipal().getAttributes();
     }
+
+
+
+
+
+
+
+
+
+
+
 
 
     @Override
