@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class PaymentController {
     @Autowired
     private StripeService stripeService;
-    @PostMapping("/charge")
+        @PostMapping("/charge")
     public ResponseEntity<String> chargeCard(@RequestParam("token") String token,
                                              @RequestParam("amount") Double amount,
                                              @RequestParam("currency") String currency)
