@@ -16,14 +16,14 @@ import java.util.Optional;
 public class ProjectController {
 
 
-        private final ProjectService projectService;
+    @Autowired
+        ProjectService projectService;
 
-        @Autowired
-        public ProjectController(ProjectService projectService) {
-            this.projectService = projectService;
-        }
+    @Autowired
+    ProjectController projectController;
 
-        @GetMapping
+
+    @GetMapping
         public List<Project> getAllProjects() {
             return projectService.getAllProjects();
         }
