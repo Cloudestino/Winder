@@ -17,7 +17,8 @@ public class User {
     private Gender gender;
     private int phoneNumber;
 
-
+    @OneToMany(mappedBy = "user")
+    private Set<Project> projects;
 
 
 
