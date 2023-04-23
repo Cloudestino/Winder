@@ -12,9 +12,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @CrossOrigin
 public class JwtController {
+
+
+
+
     @Autowired
     JwtService jwtService;
 
+
+    // login
     @PostMapping({"/authenticate"})
     public JwtResponse createJwtToken(@RequestBody JwtRequest jwtRequest) throws Exception {
         System.out.println("request");
@@ -22,6 +28,13 @@ public class JwtController {
         System.out.println(jwtRequest.getPassword());
         return jwtService.createJwtToken(jwtRequest);
     }
+
+
+
+
+
+
+
 
 
 

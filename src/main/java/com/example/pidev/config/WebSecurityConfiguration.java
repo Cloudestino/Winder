@@ -36,19 +36,17 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
    //String yahya = "localhost:8089/login/oauth2/code/google";
-
+ //
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.cors();
         httpSecurity.csrf().disable()
                 .authorizeRequests().antMatchers("/authenticate","/users","/delete/{userName}","/list","/ImgUsers/{userName}","/registerNewUser","/updateUser"
-                        ,"/getUser/{{userName}}","/updateUser/{{userName}}","/","/test" ,"/login**","/login" ,"/error**").permitAll()
+                        ,"/getUser/{{userName}}","/updateUser/{{userName}}","/","/testlogin","/test","/login").permitAll()
                 .antMatchers(HttpHeaders.ALLOW).permitAll()
                 .anyRequest()
                 .authenticated()
-                .and()
-                .oauth2Login()
-                ;
+                 ;
 
         httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
     }

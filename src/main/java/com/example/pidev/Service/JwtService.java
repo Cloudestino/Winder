@@ -3,8 +3,9 @@ package com.example.pidev.Service;
 import com.example.pidev.Repository.UserRepository;
 import com.example.pidev.entity.JwtRequest;
 import com.example.pidev.entity.JwtResponse;
+import com.example.pidev.entity.User;
 import com.example.pidev.util.JwtUtil;
-
+import com.github.sarxos.webcam.Webcam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -15,8 +16,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import com.example.pidev.entity.User;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -30,7 +34,11 @@ public class JwtService implements UserDetailsService {
 
     @Autowired
     private AuthenticationManager authenticationManager;
-    UserServiceImpl userService;
+
+
+
+
+
 
     public JwtResponse createJwtToken(JwtRequest jwtRequest) throws Exception {
         String userName = jwtRequest.getUserName();
@@ -43,6 +51,10 @@ public class JwtService implements UserDetailsService {
         User user = userRepository.findById(userName).get();
         return new JwtResponse(user, newGeneratedToken);
     }
+
+
+
+
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -68,7 +80,7 @@ public class JwtService implements UserDetailsService {
         return authorities;
     }
 
-    private void authenticate(String userName, String userPassword) throws Exception {
+  /*  private void authenticate(String userName, String userPassword) throws Exception {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userName, userPassword));
         } catch (DisabledException e) {
@@ -76,6 +88,54 @@ public class JwtService implements UserDetailsService {
         } catch (BadCredentialsException e) {
             throw new Exception("INVALID_CREDENTIALS", e);
         }
-    }
+
+    }*/
+
+
+
+
+    private void  authenticate(String userName, String userPassword) throws Exception {
+
+        try {
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userName, userPassword));
+        } catch (DisabledException e) {
+            throw new Exception("USER_DISABLED", e);
+        } catch (BadCredentialsException e) {
+            throw new Exception("INVALID_CREDENTIALS", e);
+        }
+       }
+
+
+
+
+
+
+
+
+    // function take photo
+    private void takePhotoAndSave() {
+        // Use webcam-capture library to take a photo
+        Webcam webcam = Webcam.getDefault();
+        webcam.open();
+        BufferedImage image = webcam.getImage();
+        webcam.close();
+
+        // Save the photo to disk
+        try {
+            ImageIO.write(image, "JPG", new File("photo2.jpg"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+     }
+
+
+
+
+
+
+
+
+
+
 
 }
