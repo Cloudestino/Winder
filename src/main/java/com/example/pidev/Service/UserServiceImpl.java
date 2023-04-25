@@ -7,21 +7,20 @@ import com.example.pidev.entity.Gender;
 import com.example.pidev.entity.Role;
 import com.example.pidev.entity.User;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
+import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletContext;
-import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class UserServiceImpl {
@@ -38,6 +37,8 @@ public class UserServiceImpl {
     @Autowired
     ServletContext context;
 
+    @Autowired
+    private JavaMailSender javaMailSender;
 
     public void initRolesAndUser(){
         Role adminRole=new Role();
@@ -72,44 +73,57 @@ public class UserServiceImpl {
         return passwordEncoder.encode(password);
     }
 
-    public String registerNewUser(String user, MultipartFile file) throws JsonProcessingException {
+
+
+    private void sendEmail(String to, String subject, String body) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(to);
+        message.setSubject(subject);
+        message.setText(body);
+        javaMailSender.send(message);
+    }
+
+
+    public ResponseEntity<Map<String, String>> registerNewUser(User user) throws JsonProcessingException {
         try {
-            User us = new ObjectMapper().readValue(user, User.class);
-
-            // Ensure that the Images directory exists
-            File imagesDir = new File(context.getRealPath("/Images/"));
-            if (!imagesDir.exists()) {
-                boolean success = imagesDir.mkdir();
-                if (!success) {
-                    return "Error: Unable to create Images directory";
-                }
-            }
-
-            // Save the image file
-            String filename = file.getOriginalFilename();
-            String newFileName = FilenameUtils.getBaseName(filename) + "." + FilenameUtils.getExtension(filename);
-            File serverFile = new File(context.getRealPath("/Images/" + newFileName));
-            FileUtils.writeByteArrayToFile(serverFile, file.getBytes());
-
-            // Update the User object and save to the database
-            us.setFileName(newFileName);
             Role role = roleRepository.findById("Admin").get();
+            String token = RandomString.make(30);
+            user.setToken(token);
             Set<Role> userRoles = new HashSet<>();
             userRoles.add(role);
-            us.setRole(userRoles);
-            us.setPassword(getEncodedPassword(us.getPassword()));
-            User savedUser = userRepository.save(us);
+            user.setRole(userRoles);
+            user.setPassword(getEncodedPassword(user.getPassword()));
+            User savedUser = userRepository.save(user);
 
-            if (savedUser != null && serverFile.exists()) {
-                return "ok";
+            if (savedUser != null) {
+                // Send activation email to user
+                String activationLink = "http://localhost:8090" + "/activate/" + token;
+                String emailSubject = "Activate Your Account";
+                String emailBody = "Dear " + savedUser.getUserName() + ",<br><br>" +
+                        "Please click on the following link to activate your account:<br><br>" +
+                        "<a href=\"" + activationLink + "\">" + activationLink + "</a><br><br>" +
+                        "Best regards,<br>The Cloudestino Team";
+
+                sendEmail(savedUser.getEmail(), emailSubject, emailBody);
+
+                Map<String, String> response = new HashMap<>();
+                response.put("message", "ok");
+                return ResponseEntity.ok().body(response);
             } else {
-                return "Error: Failed to save user or image";
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            return "Error: " + e.getMessage();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
+
+
+
+
+
+
+
 
     public byte[] getPhoto(String userName) throws Exception{
         User user   = userRepository.findById(userName).get();
@@ -150,6 +164,31 @@ public class UserServiceImpl {
     public User GetUserByUsername(String userName){
         return  userRepository.findById(userName).get();
     }
+
+
+
+    public String updateToken(String token) throws UsernameNotFoundException {
+        User user = userRepository.findByToken(token);
+        if (user != null) {
+            user.setToken(null);
+            userRepository.save(user);
+            return null;
+        } else {
+            throw new UsernameNotFoundException("Could not find any User with the token");
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 }

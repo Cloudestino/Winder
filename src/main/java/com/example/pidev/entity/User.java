@@ -17,7 +17,8 @@ public class User {
     private Gender gender;
     private int phoneNumber;
 
-
+    @Column(name = "token")
+    private String token;
 
 
 
@@ -29,6 +30,15 @@ public class User {
     private Set<Role> role;
 
 
+
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String Token) {
+        this.token = Token;
+    }
 
 
     public Gender getGender() {

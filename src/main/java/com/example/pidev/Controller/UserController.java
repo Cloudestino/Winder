@@ -6,13 +6,15 @@ import com.example.pidev.Service.UserServiceImpl;
 import com.example.pidev.entity.User;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -56,8 +58,23 @@ public class UserController implements UserDetails {
 
 
     @PostMapping({"/registerNewUser"})
-    public String registerNewUser(@RequestParam("user") String user, @RequestParam("file") MultipartFile file) throws JsonProcessingException {
-        return userService.registerNewUser(user, file);
+    public ResponseEntity<Map<String, String>> registerNewUser(@RequestBody User user) throws JsonProcessingException {
+        return userService.registerNewUser(user);
+    }
+
+    @GetMapping("/activate/{token}")
+    public ResponseEntity<String> activateAccount(@PathVariable String token, HttpServletResponse response) {
+
+        try {
+            String oldToken = userService.updateToken(token);
+            if (oldToken == null) {
+                response.sendRedirect("http://localhost:4200/auth/login");
+                return null; // return null to prevent ResponseEntity from being returned
+            }
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error while activating account");
+        }
     }
 
 
