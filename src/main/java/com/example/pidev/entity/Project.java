@@ -1,17 +1,16 @@
 package com.example.pidev.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.util.*;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
+
 @Entity(name = "project")
 public class Project {
 
@@ -19,18 +18,34 @@ public class Project {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
-    private String skills;
-
     @Enumerated(EnumType.STRING)
     private Scope scope;
-    private Date duration;
+    private String duration;
     private String experience;
 
-    @Enumerated(EnumType.STRING)
-    private ContractType contractType;
+    private int budgetTo;
+    private int budgetFrom;
+
+    @Column( length = 10000)
     private String description;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @CreationTimestamp
+    private Date createdAt;
+
+
+
+    @ManyToMany(cascade = CascadeType.MERGE)
+    @JoinTable(
+            name = "project_skill",
+            joinColumns = @JoinColumn(name = "project_id"),
+            inverseJoinColumns = @JoinColumn(name = "skill_id")
+    )
+    private Set<Skill> skills = new HashSet<>();
+
+
+  //  @ManyToOne
+    //@JoinColumn(name = "user_id")
+    //private User user;
+
+
 }

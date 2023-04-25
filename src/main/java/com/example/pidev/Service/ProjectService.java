@@ -2,9 +2,6 @@ package com.example.pidev.Service;
 
 import com.example.pidev.Repository.ProjectRepository;
 import com.example.pidev.entity.Project;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +12,6 @@ import java.util.Optional;
 public class ProjectService {
     @Autowired
     private ProjectRepository projectRepository;
-
     public List<Project> getAllProjects() {
         return projectRepository.findAll();
     }
@@ -25,6 +21,7 @@ public class ProjectService {
     }
 
     public Project createProject(Project project) {
+        project.setSkills(project.getSkills());
         return projectRepository.save(project);
     }
 

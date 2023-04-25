@@ -12,18 +12,17 @@ import java.util.Optional;
 
 
 @RestController
-@RequestMapping("/projects")
 public class ProjectController {
 
 
     @Autowired
-        ProjectService projectService;
+    ProjectService projectService;
 
     @Autowired
     ProjectController projectController;
 
 
-    @GetMapping
+    @GetMapping("/allProjects")
         public List<Project> getAllProjects() {
             return projectService.getAllProjects();
         }
@@ -34,8 +33,10 @@ public class ProjectController {
             return project.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
         }
 
-        @PostMapping
+        @PostMapping("/addProject")
+
         public ResponseEntity<Project> createProject(@RequestBody Project project) {
+        System.out.println(project);
             Project createdProject = projectService.createProject(project);
             return new ResponseEntity<>(createdProject, HttpStatus.CREATED);
         }
