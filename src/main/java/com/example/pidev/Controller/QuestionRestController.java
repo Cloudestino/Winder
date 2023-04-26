@@ -1,9 +1,15 @@
 package com.example.pidev.Controller;
 
+import com.example.pidev.Repository.OptionRepository;
+import com.example.pidev.Repository.QuestionRepository;
+import com.example.pidev.Service.OptionServiceC;
 import com.example.pidev.Service.QuestionServiceC;
+import com.example.pidev.entity.Option;
 import com.example.pidev.entity.Question;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.webjars.NotFoundException;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -15,6 +21,10 @@ import java.util.List;
 public class QuestionRestController {
 
     QuestionServiceC questionService;
+    OptionServiceC optionService;
+    QuestionRepository questionRepository ;
+    OptionRepository optionRepository;
+
 
 
     // http://localhost:8089/pidev/questions/retrieve-all-questions
@@ -22,6 +32,13 @@ public class QuestionRestController {
     public List<Question> getQuestions() {
         List<Question> listQuestions = questionService.getAllQuestions();
         return listQuestions;
+    }
+
+    // http://localhost:8089/pidev/questions/retrieve-selected-questions
+    @GetMapping("/retrieve-selected-questions")
+    public List<Question> getRandomQuestions() {
+        List<Question> selectedQuestions = questionService.selectRandomQuestions();
+        return selectedQuestions ;
     }
 
 
@@ -39,6 +56,7 @@ public class QuestionRestController {
         return question1;
     }
 
+
     // http://localhost:8089/pidev/questions/remove-question/1
     @DeleteMapping("/remove-question/{question-id}")
     public void removeQuestion(@PathVariable("question-id") Long questionId) {
@@ -52,12 +70,7 @@ public class QuestionRestController {
         return question1;
     }
 
-    public Question changeQuestion() {
-        List<Question> listQuestions = questionService.getAllQuestions();
-        Collections.shuffle(listQuestions);
-        Question randQuestion = listQuestions.get(0);
-        return randQuestion;
-    }
+
 
 
 

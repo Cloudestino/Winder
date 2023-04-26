@@ -5,16 +5,40 @@ import com.example.pidev.entity.Question;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Random;
 import java.util.List;
 
 @Service
 public class QuestionServiceC implements QuestionService {
     @Autowired
     QuestionRepository questionRepository ;
-
+    private final Random random = new Random();
     @Override
     public List<Question> getAllQuestions() {
         return (List<Question>) questionRepository.findAll();
+    }
+
+    @Override
+    public List<Question> selectRandomQuestions() {
+        List<Question> allQuestions = getAllQuestions();
+        List<Question> selectedQuestions = new ArrayList<>();
+
+        // Check if there are at least five questions available
+        if (allQuestions.size() >= 5) {
+            // Pick five random questions
+            while (selectedQuestions.size() < 5) {
+                Question question = allQuestions.get(random.nextInt(allQuestions.size()));
+                if (!selectedQuestions.contains(question)) {
+                    selectedQuestions.add(question);
+                }
+            }
+        } else {
+            // If there are less than five questions available, return all questions
+            selectedQuestions.addAll(allQuestions);
+        }
+
+        return selectedQuestions;
     }
 
     @Override

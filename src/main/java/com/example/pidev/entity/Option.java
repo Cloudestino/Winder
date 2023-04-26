@@ -1,6 +1,7 @@
 package com.example.pidev.entity;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -36,8 +37,12 @@ public class Option {
                 '}';
     }
 
-    // relation many to one option et question.
-    @OneToMany(mappedBy = "option")
-    private List<Question> questions;
+    public void setQuestion(Question question) {
+        this.question = question;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "question_id")
+    private Question question;
 
 }

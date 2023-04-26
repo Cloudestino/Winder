@@ -2,6 +2,7 @@ package com.example.pidev.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -17,10 +18,13 @@ public class Test implements Serializable {
 
 
 
-    //relation ManyToOne test et question.
-    @ManyToOne
-    @JoinColumn(name="question_id")
-    private Question question;
+    //relation ManyToMany test et question.
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "test_question",
+            joinColumns = @JoinColumn(name = "test_id"),
+            inverseJoinColumns = @JoinColumn(name = "question_id"))
+    private List<Question> questions = new ArrayList<>();
 
 
     public Long getTest_id() {
@@ -63,12 +67,12 @@ public class Test implements Serializable {
         this.level = level;
     }
 
-    public Question getQuestion() {
-        return question;
+    public List<Question> getQuestions() {
+        return questions;
     }
 
-    public void setQuestion(Question question) {
-        this.question = question;
+    public void setQuestions(List<Question> questions) {
+        this.questions = questions;
     }
 
     @Override
@@ -79,8 +83,7 @@ public class Test implements Serializable {
                 ", description='" + description + '\'' +
                 ", stack='" + stack + '\'' +
                 ", level='" + level + '\'' +
-                ", question=" + question.getQuestion_id() +
+                ", questions=" + questions +
                 '}';
     }
-
 }

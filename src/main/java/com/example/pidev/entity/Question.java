@@ -1,26 +1,17 @@
 package com.example.pidev.entity;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 public class Question {
-    @Override
-    public String toString() {
-        return "Question{" +
-                "question_id=" + question_id +
-                ", text='" + text + '\'' +
-                ", correct_option='" + correct_option + '\'' +
-                ", option_id=" + option.getOption_id() +
-                '}';
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "question_id")
     private Long question_id;
     private String text;
-
+    private String correct_option;
 
 
     public Long getQuestion_id() {
@@ -47,22 +38,32 @@ public class Question {
         this.correct_option = correct_option;
     }
 
-    public Option getOption() {
-        return option;
-    }
-
-    public void setOption(Option option) {
-        this.option = option;
-    }
-
-    private String correct_option;
-
     // relation one to many question et option.
-    @ManyToOne
-    @JoinColumn(name="option_id")
-    private Option option;
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Option> options = new ArrayList<>();
 
-    // relation many to one question et test.
-    @OneToMany(mappedBy = "question")
-    private List<Test> tests;
+    // relation many to many question et test.
+    @ManyToMany(mappedBy = "questions",cascade = CascadeType.ALL)
+    private List<Test> tests = new ArrayList<>();
+
+    public List<Option> getOptions() {
+        return options;
+    }
+
+    public void setOptions(List<Option> options) {
+        this.options = options;
+    }
+
+    public void setTests(List<Test> tests) {
+        this.tests = tests;
+    }
+
+    @Override
+    public String toString() {
+        return "Question{" +
+                "question_id=" + question_id +
+                ", text='" + text + '\'' +
+                ", correct_option='" + correct_option + '\'' +
+                '}';
+    }
 }

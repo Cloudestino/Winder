@@ -4,8 +4,10 @@ import com.example.pidev.Repository.OptionRepository;
 import com.example.pidev.entity.Option;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.List;
+@CrossOrigin(origins = "http://localhost:4200")
 @Service
 public class OptionServiceC implements OptionService{
 
