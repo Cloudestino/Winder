@@ -145,7 +145,7 @@ public class UserServiceImpl {
         return userRepository.existsByEmail(mail);
     }
 
-    public User getUserByMail(String mail){
+    public Optional<User> getUserByMail(String mail){
         return userRepository.findByEmail(mail);
     }
 
@@ -178,6 +178,14 @@ public class UserServiceImpl {
         }
     }
 
+
+
+    public void updatePassword(User user, String newPassword) {
+
+        user.setPassword(getEncodedPassword(newPassword));
+
+        userRepository.save(user);
+    }
 
 
 

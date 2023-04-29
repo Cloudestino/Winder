@@ -30,6 +30,9 @@ public class User {
     private Set<Role> role;
 
 
+    public User() {
+
+    }
 
 
     public String getToken() {
@@ -112,6 +115,20 @@ public class User {
     public void setFileName(String fileName) {
         this.fileName = fileName;
     }
+
+
+    public User(String userName, String nom, String prenom, String password, String email, String fileName, Gender gender, int phoneNumber, Set<Role> role) {
+        this.userName = userName;
+        this.nom = nom;
+        this.prenom = prenom;
+        this.password = password;
+        this.email = email;
+        this.fileName = fileName;
+        this.gender = gender;
+        this.phoneNumber = phoneNumber;
+        this.role = role;
+    }
+
 
 }
 
