@@ -1,6 +1,7 @@
 package com.example.pidev.Controller;
 
 import com.example.pidev.Service.ProjectService;
+import com.example.pidev.Service.UserServiceImpl;
 import com.example.pidev.entity.Project;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,9 @@ public class ProjectController {
 
     @Autowired
     ProjectService projectService;
+
+    @Autowired
+    UserServiceImpl userServiceImpl;
 
     @Autowired
     ProjectController projectController;
@@ -38,6 +42,7 @@ public class ProjectController {
         public ResponseEntity<Project> createProject(@RequestBody Project project) {
         System.out.println(project);
             Project createdProject = projectService.createProject(project);
+
             return new ResponseEntity<>(createdProject, HttpStatus.CREATED);
         }
 
@@ -51,8 +56,8 @@ public class ProjectController {
             }
         }
 
-        @DeleteMapping("/{id}")
-        public ResponseEntity<Void> deleteProject(@PathVariable Long id) {
+        @DeleteMapping("/deleteProject/{id}")
+        public ResponseEntity<List<Project>> deleteProject(@PathVariable Long id) {
             boolean isDeleted = projectService.deleteProject(id);
             if (isDeleted) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
