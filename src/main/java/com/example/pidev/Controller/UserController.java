@@ -51,7 +51,8 @@ public class UserController {
 
 
     @PostMapping({"/registerNewUser"})
-    public String registerNewUser(@RequestParam("user") String user, @RequestParam("file") MultipartFile file) throws JsonProcessingException {
+    public String registerNewUser(@RequestPart("user") String user, @RequestPart("file") MultipartFile file) throws JsonProcessingException {
+        System.out.println("user = " + user);
         return userService.registerNewUser(user, file);
     }
 
