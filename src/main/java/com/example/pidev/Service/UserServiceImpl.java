@@ -4,7 +4,7 @@ package com.example.pidev.Service;
 import com.example.pidev.Repository.RoleRepository;
 import com.example.pidev.Repository.UserRepository;
 import com.example.pidev.entity.Gender;
-import com.example.pidev.entity.Role;
+import com.example.pidev.entity.Role1;
 import com.example.pidev.entity.User;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import net.bytebuddy.utility.RandomString;
@@ -20,7 +20,10 @@ import org.springframework.stereotype.Service;
 import javax.servlet.ServletContext;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl {
@@ -41,15 +44,15 @@ public class UserServiceImpl {
     private JavaMailSender javaMailSender;
 
     public void initRolesAndUser(){
-        Role adminRole=new Role();
-        adminRole.setRoleName("Admin");
-        adminRole.setRoleDescription("Admin role");
-        roleRepository.save(adminRole);
+       // Role adminRole=new Role();
+       // adminRole.setRoleName("Admin");
+        //adminRole.setRoleDescription("Admin role");
+        //roleRepository.save(adminRole);
 
-        Role etudiantRole=new Role();
-        etudiantRole.setRoleName("Project manager");
-        etudiantRole.setRoleDescription("Project manager role");
-        roleRepository.save(etudiantRole);
+       // Role etudiantRole=new Role();
+        //etudiantRole.setRoleName("Project manager");
+        //etudiantRole.setRoleDescription("Project manager role");
+        //roleRepository.save(etudiantRole);
 
         //Ajout de l'admin dans la base
         User adminUser = new User();
@@ -61,9 +64,10 @@ public class UserServiceImpl {
         adminUser.setUserName("yahyajday");
         adminUser.setGender(Gender.MALE);
         adminUser.setPhoneNumber(51809395);
-        Set<Role> adminRoles = new HashSet<>();
-        adminRoles.add(adminRole);
-        adminUser.setRole(adminRoles);
+        adminUser.setRole1(Role1.Admin);
+        //Set<Role> adminRoles = new HashSet<>();
+        //adminRoles.add(adminRole);
+        //adminUser.setRole(adminRoles);
         userRepository.save(adminUser);
 
 
@@ -86,12 +90,13 @@ public class UserServiceImpl {
 
     public ResponseEntity<Map<String, String>> registerNewUser(User user) throws JsonProcessingException {
         try {
-            Role role = roleRepository.findById("Admin").get();
+
+           // Role role = roleRepository.findById("Admin").get();
             String token = RandomString.make(30);
             user.setToken(token);
-            Set<Role> userRoles = new HashSet<>();
-            userRoles.add(role);
-            user.setRole(userRoles);
+            //Set<Role> userRoles = new HashSet<>();
+            //userRoles.add(role);
+            //user.setRole(userRoles);
             user.setPassword(getEncodedPassword(user.getPassword()));
             User savedUser = userRepository.save(user);
 
@@ -137,6 +142,7 @@ public class UserServiceImpl {
         existingUser.setPrenom(user.getPrenom());
         existingUser.setEmail(user.getEmail());
         existingUser.setGender(user.getGender());
+        existingUser.setRole(user.getRole());
         existingUser.setPhoneNumber(user.getPhoneNumber());
 
         return userRepository.save(existingUser);
@@ -186,6 +192,10 @@ public class UserServiceImpl {
 
         userRepository.save(user);
     }
+
+
+     // webcam for fraud detection
+
 
 
 

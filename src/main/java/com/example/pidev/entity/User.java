@@ -17,9 +17,19 @@ public class User {
     private Gender gender;
     private int phoneNumber;
 
+    @Enumerated(EnumType.STRING)
+    private Role1 role1 ;
+
+    public Role1 getRole1() {
+        return role1;
+    }
+
+    public void setRole1(Role1 role) {
+        this.role1 = role;
+    }
+
     @Column(name = "token")
     private String token;
-
 
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -27,7 +37,8 @@ public class User {
             joinColumns = { @JoinColumn(name = "USER_ID") },
             inverseJoinColumns = {
                     @JoinColumn(name = "ROLE_ID") })
-    private Set<Role> role;
+    private Set<Role> roles;
+
 
 
     public User() {
@@ -100,12 +111,13 @@ public class User {
         this.password = password;
     }
 
+
     public Set<Role> getRole() {
-        return role;
+        return roles;
     }
 
-    public void setRole(Set<Role> role) {
-        this.role = role;
+    public void setRole(Set<Role> roles) {
+        this.roles = roles;
     }
 
     public String getFileName() {
@@ -117,7 +129,7 @@ public class User {
     }
 
 
-    public User(String userName, String nom, String prenom, String password, String email, String fileName, Gender gender, int phoneNumber, Set<Role> role) {
+    public User(String userName, String nom, String prenom, String password, String email, String fileName, Gender gender, int phoneNumber, Role1 role) {
         this.userName = userName;
         this.nom = nom;
         this.prenom = prenom;
@@ -126,7 +138,7 @@ public class User {
         this.fileName = fileName;
         this.gender = gender;
         this.phoneNumber = phoneNumber;
-        this.role = role;
+        this.role1 = role;
     }
 
 

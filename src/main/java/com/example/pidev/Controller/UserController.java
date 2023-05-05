@@ -2,12 +2,16 @@ package com.example.pidev.Controller;
 
 
 import com.example.pidev.Repository.OtpRepository;
+import com.example.pidev.Repository.RoleRepository;
 import com.example.pidev.Repository.UserRepository;
 import com.example.pidev.Service.UserServiceImpl;
+import com.example.pidev.entity.Role;
 import com.example.pidev.entity.User;
 import com.example.pidev.entity.otp;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -37,6 +41,8 @@ public class UserController implements UserDetails {
     @Autowired
     UserServiceImpl userService;
 
+
+
     @Autowired
     UserRepository userRepository;
     @Autowired
@@ -45,6 +51,10 @@ public class UserController implements UserDetails {
     private JavaMailSender mailSender;
     @Autowired
     private JavaMailSender javaMailSender;
+    @Autowired
+    RoleRepository roleRepository;
+
+
 
 
     @PostConstruct //lors de l'execution
@@ -69,10 +79,21 @@ public class UserController implements UserDetails {
         return userService.deleteUser(userName);
     }
 
- /*   @GetMapping("/list")//affichage+pagination
-    public Page<User> showPage(@RequestParam(defaultValue = "0") int page) {
-        return userRepository.findAll(PageRequest.of(page, 4));
-    }*/
+
+
+
+    @GetMapping("/list")//affichage+pagination
+    public Page<User> showPage(@RequestParam(defaultValue = "0") int page, @RequestParam(required = false) String role) {
+        PageRequest pageRequest = PageRequest.of(page, 2);
+        if (role != null && !role.isEmpty()) {
+            Role role1 = roleRepository.findRoleByRoleName(role);
+            return userRepository.findByRole(role1, pageRequest);
+        }
+        return userRepository.findAll(pageRequest);
+
+    }
+
+
 
 
     @PostMapping({"/registerNewUser"})
@@ -107,6 +128,18 @@ public class UserController implements UserDetails {
     public User getUserByUsername(@PathVariable("userName") String userName) throws Exception {
         return userService.GetUserByUsername(userName);
     }
+
+
+    @GetMapping("/usernames")
+    public List<String> getAllUsernames() {
+        List<User> users = userRepository.findAll();
+        List<String> usernames = new ArrayList<>();
+        for (User user : users) {
+            usernames.add(user.getUserName());
+        }
+        return usernames;
+    }
+
 
 
 
@@ -229,6 +262,11 @@ public class UserController implements UserDetails {
     }
 
    // end of forget and reset password
+
+
+
+
+
 
 
 

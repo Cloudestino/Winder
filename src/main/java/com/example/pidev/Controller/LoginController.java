@@ -1,11 +1,12 @@
 package com.example.pidev.Controller;
 
+import com.example.pidev.Service.JwtService;
 import com.example.pidev.Service.UserServiceImpl;
+import com.example.pidev.entity.JwtRequest;
+import com.example.pidev.entity.JwtResponse;
 import com.example.pidev.entity.User;
 import com.github.sarxos.webcam.Webcam;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,14 +24,74 @@ public class LoginController {
     @Autowired
     private UserServiceImpl userService;
 
+    @Autowired
+    JwtService jwtService;
     private Map<String, Integer> loginAttempts = new HashMap<>();
     private final int MAX_ATTEMPTS = 3;
 
-    @PostMapping("/testlogin")
+
+
+    @PostMapping({"/authlogin"})
+    public JwtResponse authwithfrauddetection(@RequestBody JwtRequest jwtRequest) throws Exception {
+
+        String username = jwtRequest.getUserName();
+        String password = jwtRequest.getPassword();
+
+        User dbUser = userService.GetUserByUsername(username);
+
+        if (dbUser == null) {
+            System.out.println("Invalid username or password");
+        }
+
+        if (!dbUser.getPassword().equals(password)) {
+            int attempts = loginAttempts.getOrDefault(username, 0);
+            attempts++;
+            loginAttempts.put(username, attempts);
+            if (attempts == MAX_ATTEMPTS) {
+                try {
+                    takePhotoAndSave();
+                    attempts = 0;
+                    loginAttempts.clear();
+                } catch (Exception e) {
+                    System.out.println("Error taking photo: " + e.getMessage());
+                }
+            }
+            System.out.println(attempts);
+            //return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
+            System.out.println("Invalid username or password ");
+
+
+        }
+        return jwtService.createJwtToken(jwtRequest);
+    }
+
+
+
+
+
+    private void takePhotoAndSave () {
+        // Use webcam-capture library to take a photo
+        Webcam webcam = Webcam.getDefault();
+        webcam.open();
+        BufferedImage image = webcam.getImage();
+        webcam.close();
+
+        // Save the photo to disk
+        try {
+            ImageIO.write(image, "JPG", new File("photo2.jpg"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+
+   /* @PostMapping("/testlogin")
     public ResponseEntity<?> login(@RequestBody User user) {
 
-         String username = user.getUserName();
-         String password = user.getPassword();
+        String username = user.getUserName();
+        String password = user.getPassword();
 
         User dbUser = userService.GetUserByUsername(username);
 
@@ -61,33 +122,9 @@ public class LoginController {
         return ResponseEntity.ok("Successfully logged in!");
     }
 
-
-
-  /*  private void takePhoto(String username) throws IOException {
-        // Code to take a photo with a camera
-        // Save the photo to a file with the username as the filename
-        File file = new File(username + ".jpg");
-        // Save the file to a directory
-        // ...
-    }*/
+*/
 
 
 
-    private void takePhotoAndSave() {
-        // Use webcam-capture library to take a photo
-        Webcam webcam = Webcam.getDefault();
-        webcam.open();
-        BufferedImage image = webcam.getImage();
-        webcam.close();
 
-        // Save the photo to disk
-        try {
-            ImageIO.write(image, "JPG", new File("photo2.jpg"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
-
-
-
-}
