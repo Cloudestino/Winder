@@ -6,6 +6,7 @@ import com.example.pidev.Repository.RoleRepository;
 import com.example.pidev.Repository.UserRepository;
 import com.example.pidev.Service.UserServiceImpl;
 import com.example.pidev.entity.Role;
+import com.example.pidev.entity.Role1;
 import com.example.pidev.entity.User;
 import com.example.pidev.entity.otp;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -264,7 +265,19 @@ public class UserController implements UserDetails {
    // end of forget and reset password
 
 
-
+ // pie chart count users by role
+@GetMapping("/count-by-role")
+    public Map<Role1, Number> countUsersByRole() {
+        List<Object[]> results = userRepository.countUsersByRole();
+        Map<Role1, Number> countByRole = new HashMap<>();
+        for (Object[] result : results) {
+            String roleStr = (String) result[0];
+            Role1 role = Role1.valueOf(roleStr);
+            Number count = (Number) result[1];
+            countByRole.put(role, count);
+        }
+        return countByRole;
+    }
 
 
 
