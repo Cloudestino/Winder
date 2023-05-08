@@ -1,5 +1,4 @@
 package com.example.pidev.entity;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;

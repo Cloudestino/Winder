@@ -20,7 +20,7 @@ import java.io.IOException;
 
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
-    //retrieve the authorization header then retrive the bearer token then check the username and check the token (exipred,correct informations) then allow th request
+    //retrieve the authorization header then retrive the bearer token then check the username and check the token (exipred,correct information) then allow th request
     @Autowired
     private JwtUtil jwtUtil;
     @Autowired

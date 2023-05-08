@@ -3,8 +3,8 @@ package com.example.pidev.Service;
 import com.example.pidev.Repository.UserRepository;
 import com.example.pidev.entity.JwtRequest;
 import com.example.pidev.entity.JwtResponse;
+import com.example.pidev.entity.User;
 import com.example.pidev.util.JwtUtil;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -15,7 +15,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import com.example.pidev.entity.User;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -67,6 +66,17 @@ public class JwtService implements UserDetailsService {
         });
         return authorities;
     }
+
+
+
+
+
+
+
+
+
+
+
 
     private void authenticate(String userName, String userPassword) throws Exception {
         try {
