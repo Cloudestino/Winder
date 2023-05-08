@@ -60,4 +60,6 @@ public class QuestionServiceC implements QuestionService {
     public void deleteQuestion(Long question_id) {
         questionRepository.deleteById(question_id);
     }
+
+
 }

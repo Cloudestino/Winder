@@ -39,11 +39,11 @@ public class Question {
     }
 
     // relation one to many question et option.
-    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
     private List<Option> options = new ArrayList<>();
 
     // relation many to many question et test.
-    @ManyToMany(mappedBy = "questions",cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "questions")
     private List<Test> tests = new ArrayList<>();
 
     public List<Option> getOptions() {

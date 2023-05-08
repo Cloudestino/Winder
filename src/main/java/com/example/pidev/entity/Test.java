@@ -19,7 +19,7 @@ public class Test implements Serializable {
 
 
     //relation ManyToMany test et question.
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade=CascadeType.ALL)
     @JoinTable(
             name = "test_question",
             joinColumns = @JoinColumn(name = "test_id"),
