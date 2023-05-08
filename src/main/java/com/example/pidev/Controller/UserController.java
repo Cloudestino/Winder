@@ -100,7 +100,6 @@ public class UserController implements UserDetails {
     @PostMapping({"/registerNewUser"})
     public ResponseEntity<Map<String, String>> registerNewUser(@RequestBody User user) throws JsonProcessingException {
         return userService.registerNewUser(user);
-
     }
 
     @GetMapping("/activate/{token}")
@@ -151,12 +150,12 @@ public class UserController implements UserDetails {
         return oAuth2AuthenticationToken.getPrincipal().getAttributes();
     }
 
-   // forget and reset password
+    // forget and reset password
 
     @PostMapping("/reset")
     public ResponseEntity<String> reset(@RequestBody Map<String, String> request) {
         String email = request.get("email");
-     //   Optional<User> optionalUser = Optional.ofNullable(userRepository.findByEmail(email));
+        //   Optional<User> optionalUser = Optional.ofNullable(userRepository.findByEmail(email));
         Optional<User> optionalUser = userRepository.findByEmail(email);
         System.out.println(optionalUser);
         System.out.println("optionalUser");
@@ -248,7 +247,7 @@ public class UserController implements UserDetails {
 
     @PostMapping("/reset_password")
     public ResponseEntity<Map<String, String>> resetPassword(@RequestBody Map<String, Object> payload) {
-      //  Optional<User> user = Optional.ofNullable(userRepository.findByEmail(payload.get("email").toString()));
+        //  Optional<User> user = Optional.ofNullable(userRepository.findByEmail(payload.get("email").toString()));
         Optional<User> user = userRepository.findByEmail(payload.get("email").toString());
         System.out.println(user);
         System.out.println(payload.get("password"));
@@ -263,11 +262,11 @@ public class UserController implements UserDetails {
         }
     }
 
-   // end of forget and reset password
+    // end of forget and reset password
 
 
- // pie chart count users by role
-@GetMapping("/count-by-role")
+    // pie chart count users by role
+    @GetMapping("/count-by-role")
     public Map<Role1, Number> countUsersByRole() {
         List<Object[]> results = userRepository.countUsersByRole();
         Map<Role1, Number> countByRole = new HashMap<>();

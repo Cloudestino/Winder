@@ -17,8 +17,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import org.springframework.util.StringUtils;
-import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.ServletContext;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -26,8 +24,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Objects;
-import java.util.Set;
 
 @Service
 public class UserServiceImpl {
@@ -48,12 +44,12 @@ public class UserServiceImpl {
     private JavaMailSender javaMailSender;
 
     public void initRolesAndUser(){
-       // Role adminRole=new Role();
-       // adminRole.setRoleName("Admin");
+        // Role adminRole=new Role();
+        // adminRole.setRoleName("Admin");
         //adminRole.setRoleDescription("Admin role");
         //roleRepository.save(adminRole);
 
-       // Role etudiantRole=new Role();
+        // Role etudiantRole=new Role();
         //etudiantRole.setRoleName("Project manager");
         //etudiantRole.setRoleDescription("Project manager role");
         //roleRepository.save(etudiantRole);
@@ -93,10 +89,9 @@ public class UserServiceImpl {
 
 
     public ResponseEntity<Map<String, String>> registerNewUser(User user) throws JsonProcessingException {
-
         try {
 
-           // Role role = roleRepository.findById("Admin").get();
+            // Role role = roleRepository.findById("Admin").get();
             String token = RandomString.make(30);
             user.setToken(token);
             //Set<Role> userRoles = new HashSet<>();
@@ -199,7 +194,7 @@ public class UserServiceImpl {
     }
 
 
-     // webcam for fraud detection
+    // webcam for fraud detection
 
 
 
