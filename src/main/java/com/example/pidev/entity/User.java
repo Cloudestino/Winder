@@ -1,12 +1,18 @@
 package com.example.pidev.entity;
 
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.util.Set;
 
 @Entity
+@Data
 public class User {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     private String userName;
     private String nom;
     private String prenom;
@@ -140,6 +146,7 @@ public class User {
         this.phoneNumber = phoneNumber;
         this.role1 = role;
     }
+
 
 
 }

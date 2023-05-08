@@ -100,6 +100,7 @@ public class UserController implements UserDetails {
     @PostMapping({"/registerNewUser"})
     public ResponseEntity<Map<String, String>> registerNewUser(@RequestBody User user) throws JsonProcessingException {
         return userService.registerNewUser(user);
+
     }
 
     @GetMapping("/activate/{token}")

@@ -17,6 +17,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.ServletContext;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -24,6 +26,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Objects;
+import java.util.Set;
 
 @Service
 public class UserServiceImpl {
@@ -89,6 +93,7 @@ public class UserServiceImpl {
 
 
     public ResponseEntity<Map<String, String>> registerNewUser(User user) throws JsonProcessingException {
+
         try {
 
            // Role role = roleRepository.findById("Admin").get();
