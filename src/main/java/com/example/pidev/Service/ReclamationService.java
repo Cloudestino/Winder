@@ -20,8 +20,7 @@ public class ReclamationService {
 ReclamationRepository reclamationRepository;
 @Autowired
 DictionnaireRepository badwordsRepo;
-@Autowired
-JavaMailSender javaMailSender;
+
 @Autowired
 PasswordEncoder passwordencoder;
 
@@ -32,31 +31,18 @@ public void ajouterReclamation(Reclamation r) {
 	for (DictionnaireBadWords bd : badwords) {
 		badwords1.add(bd.getWord());
 	}
-	
-	
 	if (verif(r) == 1) {
-		
-	
 	r.setEtat("non traitée");
 	 reclamationRepository.save(r);
 	}
 	else if(verif(r) == 0) {
 		String encodedPass = passwordencoder.encode(r.getContenuRec());
-		
-		
-		
+
 		r.setContenuRec(encodedPass);
-		
+
 		r.setEtat("non traitée");
 		 reclamationRepository.save(r);
-//			SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-//			simpleMailMessage.setFrom("schoolesprit1@gmail.com");
-//			//simpleMailMessage.setTo(r.getUser().getEmailUser());
-//
-//			simpleMailMessage.setTo("hajer.moumni@esprit.tn");
-//			simpleMailMessage.setSubject("This is an alert, you have sent a bad word");
-//			simpleMailMessage.setText("This is an alert, you have sent a bad word, if you keep sending bad words, you might get banned");
-//			javaMailSender.send(simpleMailMessage);
+
 	}
 
 	
@@ -150,10 +136,12 @@ public List<Reclamation> listerReclamationParDateDonnéé(Date d1) {
 		}
 	}
 return listreclamation;
-
-
-
 }
+
+	public List<Reclamation> getReclamationsByUser(Long userId) {
+		// Utilisez le repository de réclamations pour récupérer les réclamations par utilisateur
+		return reclamationRepository.findByUserId(userId);
+	}
 	/*public long getResponseTime(Long reclamationId) {
 		Reclamation r = reclamationRepository.findById(reclamationId).orElseThrow(() -> new IllegalArgumentException("Invalid visit request id"));
 		LocalDateTime requestTime = r.getSendingDate();

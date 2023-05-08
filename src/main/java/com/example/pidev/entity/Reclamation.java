@@ -33,8 +33,8 @@ public class Reclamation implements Serializable {
 	//@Size(max=4000 , message="The total number of characters cannot be exceeded")
 	private String contenuRec;
 	
-	@Enumerated(EnumType.STRING)
-	private reclamationType type;
+	//@Enumerated(EnumType.STRING)
+	private String type;
 	
 
 	

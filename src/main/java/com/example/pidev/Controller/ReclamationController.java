@@ -64,6 +64,11 @@ public List<Reclamation> ReclamationAujourdhui(){
 public int nombresReclamationAujourdhui(){
 	return reclamationService.nbrReclamationAujourdhui();
 }
+
+	@GetMapping("/getreclamationparuser/{userId}")
+	public List<Reclamation> getReclamationsByUser(@PathVariable Long userId) {
+		return reclamationService.getReclamationsByUser(userId);
+	}
 /*	@GetMapping("/{id}/responseTime")
 	public long getResponseTime(@PathVariable Long id) {
 		return reclamationService.getResponseTime(id);

@@ -11,7 +11,7 @@ import java.util.List;
 
 @Repository
 public interface ReclamationRepository extends JpaRepository<Reclamation, Long> {
-	
+	List<Reclamation> findByUserId(Long userId);
 	
 	@Query("SELECT c FROM Reclamation c WHERE c.sendingDate = :d1 ")
 	public List<Reclamation> getReclamationBYdate(@Param("d1") Date d1);
