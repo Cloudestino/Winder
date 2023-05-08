@@ -1,7 +1,10 @@
 package com.example.pidev.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -17,6 +20,9 @@ public class User {
     private Gender gender;
     private int phoneNumber;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    @JsonIgnore
+    private List<Reclamation> reclamations;
     @Enumerated(EnumType.STRING)
     private Role1 role1 ;
 
