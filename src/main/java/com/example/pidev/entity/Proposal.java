@@ -21,7 +21,9 @@ public class Proposal implements Serializable {
     private String client;
     private String cover_letter;
     private String status;
+    private Float price ;
     private Double rate;
+
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "proposal")
     private Set<Rating> ratings;

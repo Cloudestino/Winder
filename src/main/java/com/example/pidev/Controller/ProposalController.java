@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.*;
 
 
 import java.util.List;
+@CrossOrigin(origins = "*")
+
+
 @RestController
 @RequestMapping("/Proposal")
 public class ProposalController {
@@ -27,10 +30,12 @@ public class ProposalController {
     }
 
     @PutMapping("/updateProp/{idProposal}")
+    @CrossOrigin(origins = "*")
     public Proposal updateProposal(@RequestBody Proposal p,@PathVariable Integer idProposal){
         return this.proposalRepo.findById(idProposal).map(y->{
             y.setClient(p.getClient());
             y.setStatus(p.getStatus());
+            y.setPrice(p.getPrice());
             y.setCover_letter(p.getCover_letter());
             return proposalRepo.save(y);
         }).orElseGet(()->{
@@ -40,8 +45,14 @@ public class ProposalController {
 
     }
     @DeleteMapping("/deleteProp/{idProposal}")
-    public void deleteProposal(@RequestBody Proposal p,@PathVariable Integer idProposal){
+    @CrossOrigin(origins = "*")
+    public void deleteProposal(@PathVariable Integer idProposal){
         proposalService.deleteProposal(idProposal);
-
     }
+
+    @GetMapping("/filterbyrange")
+    public List<Proposal> fpp(@RequestParam(name = "minPrice") float minPrice,@RequestParam(name = "maxPrice") float maxPrice ){
+        return proposalService.filterbyrange(minPrice, maxPrice);
+    }
+
 }

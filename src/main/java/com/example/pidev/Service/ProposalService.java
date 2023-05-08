@@ -39,4 +39,11 @@ public class ProposalService implements IProposalService {
     public void deleteProposal(Integer idProposal) {
         proposalRepo.deleteById(idProposal);
     }
+
+    @Override
+    public List<Proposal> filterbyrange(float minPrice, float maxPrice) {
+        return proposalRepo.findAllByPriceIsBetween(minPrice,maxPrice);
+    }
+
+
 }
