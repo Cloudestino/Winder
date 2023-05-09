@@ -20,6 +20,9 @@ import java.util.List;
 @RequestMapping("/questions")
 public class QuestionRestController {
 
+    @Autowired
+
+
     QuestionServiceC questionService;
     OptionServiceC optionService;
     QuestionRepository questionRepository ;
