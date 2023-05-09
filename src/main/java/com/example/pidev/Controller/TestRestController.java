@@ -9,6 +9,7 @@ import com.example.pidev.entity.Option;
 import com.example.pidev.entity.Question;
 import com.example.pidev.entity.Test;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +26,7 @@ import java.util.Optional;
 @AllArgsConstructor
 @RequestMapping("/tests")
 public class TestRestController {
-
+ 
     TestServiceC testService;
     QuestionRepository questionRepository ;
     TestRepository testRepository ;
@@ -152,35 +153,34 @@ public class TestRestController {
     @PutMapping("/update-test/{test_id}")
     public Test updateTest(@PathVariable("test_id") long test_id, @RequestBody Test test) {
         Optional<Test> testData = testRepository.findById(test_id);
-            Test test1 = testData.get();
+        Test test1 = testData.get();
 
-            test1.setName(test.getName());
-            test1.setDescription(test.getDescription());
-            test1.setStack(test.getStack());
-            test1.setLevel(test.getLevel());
-            List<Question> questions = new ArrayList<>();
-            for (Question question : test.getQuestions()) {
-                Question question1 = new Question();
-                question1.setText(question.getText());
-                question1.setCorrect_option(question.getCorrect_option());
+        test1.setName(test.getName());
+        test1.setDescription(test.getDescription());
+        test1.setStack(test.getStack());
+        test1.setLevel(test.getLevel());
+        List<Question> questions = new ArrayList<>();
+        for (Question question : test.getQuestions()) {
+            Question question1 = new Question();
+            question1.setText(question.getText());
+            question1.setCorrect_option(question.getCorrect_option());
 
-                List<Option> options = new ArrayList<>();
-                for (Option option : question.getOptions()) {
-                    Option option1 = new Option();
-                    option1.setText(option.getText());
-                    option.setQuestion(question);
-                    options.add(option);
-                }
-
-                question.setOptions(options);
-                questions.add(question);
+            List<Option> options = new ArrayList<>();
+            for (Option option : question.getOptions()) {
+                Option option1 = new Option();
+                option1.setText(option.getText());
+                option1.setQuestion(question1);
+                options.add(option1);
             }
 
-            test.setQuestions(questions);
+            question1.setOptions(options);
+            questions.add(question1);
+        }
 
-            Test savedTest = testService.createTest(test);
+        test1.setQuestions(questions);
 
-            return savedTest;
+        Test savedTest = testService.createTest(test1);
 
+        return savedTest;
     }
 }
