@@ -3,6 +3,7 @@ package com.example.pidev.Controller;
 import com.example.pidev.Service.ProjectService;
 import com.example.pidev.Service.UserServiceImpl;
 import com.example.pidev.entity.Project;
+import com.example.pidev.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,10 +38,11 @@ public class ProjectController {
             return project.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
         }
 
-        @PostMapping("/addProject")
+        @PostMapping("/addProject/{id}")
 
-        public ResponseEntity<Project> createProject(@RequestBody Project project) {
-        System.out.println(project);
+        public ResponseEntity<Project> createProject(@RequestBody Project project, @PathVariable String id) {
+            Optional<User> user = userServiceImpl.getUserByMail(id);
+            project.setUser(user.get());
             Project createdProject = projectService.createProject(project);
 
             return new ResponseEntity<>(createdProject, HttpStatus.CREATED);
@@ -64,5 +66,19 @@ public class ProjectController {
             } else {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
+        }
+
+
+        // count all projects
+        @GetMapping("/countProjects")
+        public Long countBy() {
+            return projectService.countBy();
+        }
+
+
+        // project by user email
+        @GetMapping("/projectByUserEmail/{email}")
+        public List<Project> findByUserEmail(@PathVariable String email) {
+            return projectService.findByUserEmail(email);
         }
     }

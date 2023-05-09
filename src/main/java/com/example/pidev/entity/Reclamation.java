@@ -49,7 +49,6 @@ public class Reclamation implements Serializable {
 	
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "reclamation")
-	@JsonIgnore
 	private List<Response> responses;
 	
 	

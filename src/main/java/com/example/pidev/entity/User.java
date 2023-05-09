@@ -37,6 +37,9 @@ public class User {
     @Column(name = "token")
     private String token;
 
+    @OneToMany(mappedBy = "user")
+    @JsonIgnore
+    private List<Project> projets;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "USER_ROLE",

@@ -1,5 +1,6 @@
 package com.example.pidev.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -43,6 +44,10 @@ public class Project {
     private Set<Skill> skills = new HashSet<>();
 
 
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
   //  @ManyToOne
     //@JoinColumn(name = "user_id")
     //private User user;

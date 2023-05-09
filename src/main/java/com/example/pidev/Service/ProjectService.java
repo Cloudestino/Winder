@@ -44,4 +44,14 @@ public class ProjectService {
             return false;
         }
     }
+
+    // count all projects
+    public Long countBy() {
+        return projectRepository.countBy();
+    }
+
+    // project by user email
+    public List<Project> findByUserEmail(String email) {
+        return projectRepository.findByUserEmail(email);
+    }
 }
