@@ -1,90 +1,83 @@
 package com.example.pidev.entity;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import java.io.Serializable;
-import java.math.BigDecimal;
+import java.util.List;
+import java.util.Set;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
 @Entity
-@Table( name = "users" )
-public class User implements Serializable {
-
-
+public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
-
-    @Column(name = "first_name")
-    private String firstName;
-
-    @Column(name = "last_name")
-    private String lastName;
-
-    @Column(name = "username")
-    private String username;
-
-    @Column(name = "email")
-    private String email;
-
-    @Column(name = "password")
+    private String userName;
+    private String nom;
+    private String prenom;
     private String password;
+    private String email;
+    private String fileName;
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
+    private int phoneNumber;
 
-    @Column(name = "skills_list")
-    private String skillsList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    @JsonIgnore
+    private List<Reclamation> reclamations;
+    @Enumerated(EnumType.STRING)
+    private Role1 role1 ;
 
-    @Column(name = "description")
-    private String description;
-
-    @Column(name = "level")
-    private int level;
-
-    @Column(name = "hourly_rate")
-    private BigDecimal hourlyRate;
-
-    @Column(name = "verified")
-    private boolean verified;
-
-    @Column(name = "identity_card")
-    private String identityCard;
-
-    public void setId(Long id) {
-        this.id = id;
+    public Role1 getRole1() {
+        return role1;
     }
 
-    public Long getId() {
-        return id;
+    public void setRole1(Role1 role) {
+        this.role1 = role;
     }
 
-    public String getFirstName() {
-        return firstName;
+    @Column(name = "token")
+    private String token;
+
+    @OneToMany(mappedBy = "user")
+    @JsonIgnore
+    private List<Project> projets;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "USER_ROLE",
+            joinColumns = { @JoinColumn(name = "USER_ID") },
+            inverseJoinColumns = {
+                    @JoinColumn(name = "ROLE_ID") })
+    private Set<Role> roles;
+
+
+
+    public User() {
+
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+
+    public String getToken() {
+        return token;
     }
 
-    public String getLastName() {
-        return lastName;
+    public void setToken(String Token) {
+        this.token = Token;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+
+    public Gender getGender() {
+        return gender;
     }
 
-    public String getUsername() {
-        return username;
+    public void setGender(Gender gender) {
+        this.gender = gender;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public int getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(int phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public String getEmail() {
@@ -95,6 +88,30 @@ public class User implements Serializable {
         this.email = email;
     }
 
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getNom() {
+        return nom;
+    }
+
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+
+    public String getPrenom() {
+        return prenom;
+    }
+
+    public void setPrenom(String prenom) {
+        this.prenom = prenom;
+    }
+
     public String getPassword() {
         return password;
     }
@@ -103,51 +120,36 @@ public class User implements Serializable {
         this.password = password;
     }
 
-    public String getSkillsList() {
-        return skillsList;
+
+    public Set<Role> getRole() {
+        return roles;
     }
 
-    public void setSkillsList(String skillsList) {
-        this.skillsList = skillsList;
+    public void setRole(Set<Role> roles) {
+        this.roles = roles;
     }
 
-    public String getDescription() {
-        return description;
+    public String getFileName() {
+        return fileName;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 
-    public int getLevel() {
-        return level;
+
+    public User(String userName, String nom, String prenom, String password, String email, String fileName, Gender gender, int phoneNumber, Role1 role) {
+        this.userName = userName;
+        this.nom = nom;
+        this.prenom = prenom;
+        this.password = password;
+        this.email = email;
+        this.fileName = fileName;
+        this.gender = gender;
+        this.phoneNumber = phoneNumber;
+        this.role1 = role;
     }
 
-    public void setLevel(int level) {
-        this.level = level;
-    }
 
-    public BigDecimal getHourlyRate() {
-        return hourlyRate;
-    }
-
-    public void setHourlyRate(BigDecimal hourlyRate) {
-        this.hourlyRate = hourlyRate;
-    }
-
-    public boolean isVerified() {
-        return verified;
-    }
-
-    public void setVerified(boolean verified) {
-        this.verified = verified;
-    }
-
-    public String getIdentityCard() {
-        return identityCard;
-    }
-
-    public void setIdentityCard(String identityCard) {
-        this.identityCard = identityCard;
-    }
 }
+
