@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 
 
 import java.util.List;
-@CrossOrigin(origins = "*")
 
 
 @RestController
@@ -26,11 +25,12 @@ public class ProposalController {
     @PostMapping("/addProp")
     @ResponseBody
     public Proposal addProposal(@RequestBody Proposal p){
+
+        System.out.println(p);
         return proposalService.addProposal(p);
     }
 
     @PutMapping("/updateProp/{idProposal}")
-    @CrossOrigin(origins = "*")
     public Proposal updateProposal(@RequestBody Proposal p,@PathVariable Integer idProposal){
         return this.proposalRepo.findById(idProposal).map(y->{
             y.setClient(p.getClient());
@@ -45,7 +45,6 @@ public class ProposalController {
 
     }
     @DeleteMapping("/deleteProp/{idProposal}")
-    @CrossOrigin(origins = "*")
     public void deleteProposal(@PathVariable Integer idProposal){
         proposalService.deleteProposal(idProposal);
     }

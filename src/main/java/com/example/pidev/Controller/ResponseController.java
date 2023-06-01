@@ -28,11 +28,13 @@ public class ResponseController {
 	public void addResponse(@RequestBody Response r,@PathVariable("idReclamation") Long idReclamation)
 	{
 		  responseService.addResponse(r,idReclamation);
-		  sendsms("+21624668174");
+		  System.out.println(r.getReclamation().getUser().getPhoneNumber());
+		  sendsms("+216"+r.getReclamation().getUser().getPhoneNumber());
 		  
 
 	}
 	public void sendsms(String str) {
+		System.out.println(str+"number");
 		Twilio.init("ACbc4373fd2cc5375dec9807665d085c2b", "1901138ff2aefe44943750f0919ed39e");
 		try {
 			com.twilio.rest.api.v2010.account.Message message = com.twilio.rest.api.v2010.account.Message

@@ -136,9 +136,10 @@ public List<Reclamation> listerReclamationParDateDonnéé(Date d1) {
 return listreclamation;
 }
 
-	public List<Reclamation> getReclamationsByUser(Long userId) {
-		// Utilisez le repository de réclamations pour récupérer les réclamations par utilisateur
-		return null;
+	public List<Reclamation> getReclamationsByUser(String userName) {
+
+	System.out.println("username"+userName);
+		return reclamationRepository.getReclamationByUsername(userName);
 	}
 	/*public long getResponseTime(Long reclamationId) {
 		Reclamation r = reclamationRepository.findById(reclamationId).orElseThrow(() -> new IllegalArgumentException("Invalid visit request id"));

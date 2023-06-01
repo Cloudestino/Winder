@@ -14,7 +14,7 @@ public class SmsRequest {
 
     public SmsRequest(@JsonProperty("phoneNumber") String phoneNumber,
                       @JsonProperty("message") String message) {
-        this.phoneNumber = "+21624668174";
+        this.phoneNumber = "+216" + phoneNumber;
         this.message = "This is your an Alert";
     }
 

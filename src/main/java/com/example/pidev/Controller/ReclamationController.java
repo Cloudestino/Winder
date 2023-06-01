@@ -1,7 +1,9 @@
 package com.example.pidev.Controller;
 
 import com.example.pidev.Service.ReclamationService;
+import com.example.pidev.Service.UserServiceImpl;
 import com.example.pidev.entity.Reclamation;
+import com.example.pidev.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,11 +16,19 @@ public class ReclamationController {
 @Autowired
 ReclamationService reclamationService;
 
+@Autowired
+	UserServiceImpl userService;
 
-@PostMapping("/add-reclamation")
+
+@PostMapping("/add-reclamation/{userName}")
 @ResponseBody
-public void addReclamation(@RequestBody Reclamation r)
+public void addReclamation(@RequestBody Reclamation r, @PathVariable("userName") String userName)
+
 {
+
+	User user = userService.GetUserByUsername(userName);
+
+	  r.setUser(user);
 	  reclamationService.ajouterReclamation(r);
 
 }
@@ -65,9 +75,11 @@ public int nombresReclamationAujourdhui(){
 	return reclamationService.nbrReclamationAujourdhui();
 }
 
-	@GetMapping("/getreclamationparuser/{userId}")
-	public List<Reclamation> getReclamationsByUser(@PathVariable Long userId) {
-		return reclamationService.getReclamationsByUser(userId);
+	@GetMapping("/getreclamationparuser/{userName}")
+	public List<Reclamation> getReclamationsByUser(@PathVariable String userName) {
+
+System.out.println("user name : "+userName);
+		return reclamationService.getReclamationsByUser(userName);
 	}
 /*	@GetMapping("/{id}/responseTime")
 	public long getResponseTime(@PathVariable Long id) {
